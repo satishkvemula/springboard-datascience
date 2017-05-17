@@ -1,7 +1,11 @@
 .DS_Store
 .metadata
 .html
+.png
 chromedriver
 .recommenders/
+tripGmapPngs/
 tripGmapSnapShots/
+2013_Aug_tripGmapSnapShots/
+2013_Aug_tripGmapPngs/
 RemoteSystemsTempFiles/
