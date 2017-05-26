@@ -69,7 +69,7 @@ public class ShowPNG extends JFrame {
 		Arrays.sort(files);
 		for (File gmapFile : files) {
 //			System.out.println(gmapFile.toString());
-			Thread.sleep(25);
+			Thread.sleep(25	);
 			label.setIcon(new ImageIcon(gmapFile.toString()));
 			this.pack();
 

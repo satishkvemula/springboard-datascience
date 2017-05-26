@@ -2,6 +2,7 @@
 .metadata
 .html
 .png
+.xlsx
 chromedriver
 .recommenders/
 tripGmapPngs/
