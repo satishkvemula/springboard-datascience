@@ -19,38 +19,12 @@ public class GoOverRouteMaps {
 
 	public static void main(String... args) throws InterruptedException, IOException {
 
-		String gmapFolder = "/Users/p2723777/personal/springboard-datascience/capstone_babs/tripanimation/2013_Aug_tripGmapSnapShots";
-		String gmapPngFolder = "/Users/p2723777/personal/springboard-datascience/capstone_babs/tripanimation/2013_Aug_tripGmapPngs";
 		System.setProperty("webdriver.chrome.driver", "/Users/p2723777/Downloads/chromedriver");
 		ChromeDriver driver = new ChromeDriver();
 		driver.manage().timeouts().pageLoadTimeout(2000, TimeUnit.MILLISECONDS);
-		File gmapDirectory = new File(gmapFolder);
+		
+		driver.get("file:///Users/p2723777/personal/temp/Weather%20History%20for%20San%20Francisco,%20CA%20_%20Weather%20Underground.htm");
 
-		File[] files = gmapDirectory.listFiles(new FileFilter() {
-
-			public boolean accept(File file) {
-				return !file.isHidden();
-			}
-		});
-
-		Arrays.sort(files);
-		for (File gmapFile : files) {
-			// System.out.println(gmapFile.toString());
-
-			try {
-			driver.get("file://" + gmapFile.toString());
-
-			Thread.sleep(2000);
-			 File scrFile = ((TakesScreenshot)driver).getScreenshotAs(OutputType.FILE);
-			
-			 // Now you can do whatever you need to do with it, for example copy
-			 // somewhere
-			 FileUtils.copyFile(scrFile, new
-			 File(gmapPngFolder + "/" + FilenameUtils.removeExtension(gmapFile.getName()) + ".png"));
-			} catch(RuntimeException re) {
-				re.printStackTrace();
-			}
-		}
 	}
 
 	// public static void main(String... args) throws InterruptedException,
