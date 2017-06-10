@@ -22,13 +22,13 @@ public class CollectTemperatures {
 		long startTime = System.currentTimeMillis();
 		System.setProperty("webdriver.chrome.driver", "/Users/p2723777/Downloads/chromedriver");
 		driver = new ChromeDriver();
-		driver.manage().timeouts().pageLoadTimeout(10000, TimeUnit.MILLISECONDS);
+		driver.manage().timeouts().pageLoadTimeout(20000, TimeUnit.MILLISECONDS);
 
 		String urlTemplate ="https://www.wunderground.com/history/airport/KSFO/DAY/DailyHistory.html?req_city=San%20Francisco&req_state=CA&req_statename=California&reqdb.zip=94103&reqdb.magic=1&reqdb.wmo=99999";
 		
 		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-		Date startDate = formatter.parse("2013-08-28");
-		Date endDate = formatter.parse("2014-02-28");
+		Date startDate = formatter.parse("2014-01-05");
+		Date endDate = formatter.parse("2014-03-01");
 		
 		Calendar start = Calendar.getInstance();
 		start.setTime(startDate);
@@ -36,9 +36,9 @@ public class CollectTemperatures {
 		end.setTime(endDate);
 
 		writeHeaderToFile();
+		int numberOfDays= 0;
 		for (Date date = start.getTime(); start.before(end); start.add(Calendar.DATE, 1), date = start.getTime()) {
-		    // Do your job here with `date`.
-		    System.out.println(date);
+			long localStartTime = System.currentTimeMillis();
 
 			SimpleDateFormat day1Formatter = new SimpleDateFormat("yyyy/M/dd");
 		    
@@ -48,38 +48,20 @@ public class CollectTemperatures {
 			driver.get(url);
 			List<List<String>> hourlyData = getHourlyData();
 			writeToFile(day, hourlyData);
+			numberOfDays++;
+			System.out.println("Time Taken for " + day + " : " + (System.currentTimeMillis() - localStartTime) + " ms");
 		}
-		
-		String day = "2013/8/28";
-		String url = urlTemplate.replace("DAY", day);
-		
-		driver.get(url);
-
-//		driver.get(
-//				"file:///Users/p2723777/personal/temp/Weather%20History%20for%20San%20Francisco,%20CA%20_%20Weather%20Underground.htm");
-
-		
-//		List<String> headers = getHeaders();
-		List<List<String>> hourlyData = getHourlyData();
-		writeToFile(day, hourlyData);
-		System.out.println("Done");
-		
-		day = "2013/8/29";
-		url = urlTemplate.replace("DAY", day);
-		driver.get(url);
-		hourlyData = getHourlyData();
-		writeToFile(day, hourlyData);
-
 
         writer.flush();
         writer.close();
         
-        System.out.println("Time Taken " + (System.currentTimeMillis() - startTime) + " ms");
+        System.out.println("Time Taken for " + numberOfDays + " days : " + (System.currentTimeMillis() - startTime) + " ms");
         driver.close();
+        driver.quit();
 	}
 	
 	public static void writeHeaderToFile() throws IOException {
-        String csvFile = "/Users/p2723777/personal/springboard-datascience/capstone_babs/CapstoneProject/data/temperatures.csv";
+        String csvFile = "/Users/p2723777/personal/springboard-datascience/capstone_babs/CapstoneProject/data/SFO5_temperatures.csv";
         writer = new FileWriter(csvFile);
 
         CSVUtils.writeLine(writer, Arrays.asList("Time", "Temp(F)", "Humidity(%)", "WindSpeed(mph)"));
@@ -91,7 +73,9 @@ public class CollectTemperatures {
         	String time = day + " " + dataRow.get(0);
         	SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd hh:mm aaa"); //2013/8/28 12:56 AM
         	Date nearestHour = toNearestWholeHour(dateFormat.parse(time));
-        	time = dateFormat.format(nearestHour);
+
+        	SimpleDateFormat outputDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm"); //2013/8/28 12:56 AM
+        	time = outputDateFormat.format(nearestHour);
         	
         	String temperature = dataRow.get(1).split(" ")[0];
         	String humidity = dataRow.get(3).replace("%", "");
