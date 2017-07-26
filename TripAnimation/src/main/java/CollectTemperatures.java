@@ -61,7 +61,7 @@ public class CollectTemperatures {
 	}
 	
 	public static void writeHeaderToFile() throws IOException {
-        String csvFile = "/Users/p2723777/personal/springboard-datascience/capstone_babs/CapstoneProject/data/SFO5_temperatures.csv";
+        String csvFile = "/Users/p2723777/personal/springboard-datascience/capstone_babs/CapstoneProject/data/SFO9_temperatures.csv";
         writer = new FileWriter(csvFile);
 
         CSVUtils.writeLine(writer, Arrays.asList("Time", "Temp(F)", "Humidity(%)", "WindSpeed(mph)"));
